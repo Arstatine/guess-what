@@ -220,7 +220,7 @@ function Category() {
 
   return (
     <div className='px-12 lg:px-0 py-12 relative flex justify-center items-center flex-col'>
-      <div className='container flex justify-between items-center'>
+      <div className='container flex justify-between items-center flex-col md:flex-row'>
         <Link
           to='/'
           className='hidden lg:block text-5xl font-black outline-none'
@@ -228,9 +228,13 @@ function Category() {
           <img src={logo} alt='logo' className='w-[250px] mx-12' />
         </Link>
         <Link to='/' className='block lg:hidden text-5xl font-black'>
-          <img src={mini_logo} alt='logo' className='w-[150px]' />
+          <img
+            src={mini_logo}
+            alt='logo'
+            className='px-[25%] w-auto md:w-[200px]'
+          />
         </Link>
-        <div className='text-2xl font-black mx-0 lg:mx-12'>
+        <div className='text-2xl font-black mx-0 lg:mx-12  text-center md:text-start'>
           <div className=' text-gray-400'>
             Points: <span className='text-green-400 text-4xl'>{points}</span>
           </div>
@@ -328,6 +332,13 @@ function Category() {
                     </p>
                   </div>
                   <div className='block lg:hidden text-center'>
+                    <h1 className='text-lg mt-6 text-center font-bold'>
+                      Total Points
+                    </h1>
+                    <h1 className='text-5xl text-green-400 text-center font-black uppercase'>
+                      {points}
+                    </h1>
+
                     <h1 className='text-7xl py-12 text-red-400 text-center font-black uppercase'>
                       Game Over
                     </h1>
