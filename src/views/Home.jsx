@@ -27,9 +27,10 @@ function Home() {
                   <img
                     src={category.img}
                     alt={category.category}
+                    loading='lazy'
                     className='w-full h-full object-cover'
                   />
-                  <div className='absolute top-0 left-0 w-full h-full group-hover:backdrop-blur-0 bg-[rgba(0,0,0,.3)] backdrop-blur-sm flex justify-center items-center text-lg md:text-2xl font-bold text-gray-100 uppercase'>
+                  <div className='absolute top-0 left-0 w-full h-full group-hover:bg-[rgba(0,0,0,.3)] bg-[rgba(0,0,0,.5)] flex justify-center items-center text-lg md:text-2xl font-bold text-gray-100 uppercase'>
                     {category.category}
                   </div>
                 </Link>
