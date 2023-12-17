@@ -47,3 +47,5 @@ _Rounded Up (for decimals)_ <br>
 - Stop - `Escape`/`Esc`
 - Restart - `Control` + `Space`
 - Skip - `Tab`
+
+_Made by Arstatine_
