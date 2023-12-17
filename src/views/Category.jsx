@@ -16,9 +16,9 @@ function Category() {
   const [correct, setCorrect] = useState(false); // answer is correct
   const [isStarted, setIsStarted] = useState(false); // if game started
   const [enable, setEnable] = useState(false); // if input is enable
-  const [time, setTime] = useState(20); // countdown timer
+  const [time, setTime] = useState(23); // countdown timer
   const [points, setPoints] = useState(0); // current points
-  const [questionCount, setQuestionCount] = useState({ curr: 1, max: 5 }); // number of questions answered or not, and max set of question
+  const [questionCount, setQuestionCount] = useState({ curr: 1, max: 10 }); // number of questions answered or not, and max set of question
   const [currentPoint, setCurrentPoint] = useState({
     visible: false,
     currentPoint: 0,
@@ -41,7 +41,7 @@ function Category() {
           setCurrentPoint({ visible: false, currentPoint: 0 });
           setQuestionCount((prev) => ({ ...prev, curr: prev.curr + 1 }));
           setInputValue('');
-          setTime(20);
+          setTime(23);
           setCorrect(false);
           setEnable(true);
           setData(data[0]);
@@ -72,7 +72,7 @@ function Category() {
   // stop game clear states
   const stopGame = () => {
     setInputValue('');
-    setTime(20);
+    setTime(23);
     setCorrect(false);
     setEnable(false);
     setPoints(0);
@@ -105,6 +105,7 @@ function Category() {
       } else if (keyPressed == 'Tab') {
         event.preventDefault();
         if (enable) {
+          setEnable(false);
           nextQuestion();
         }
       } else if (isCtrlPressed && keyPressed == ' ') {
@@ -185,7 +186,9 @@ function Category() {
           } else {
             setEnable(false);
             setTimeout(() => {
-              return nextQuestion();
+              if (enable) {
+                return nextQuestion();
+              }
             }, 3000);
           }
         }
@@ -255,7 +258,25 @@ function Category() {
           {isStarted && (
             <>
               <div className='text-lg font-bold text-center'>Timer</div>
-              <div className='text-8xl text-center font-bold'>{time}</div>
+              <div className='text-8xl text-center font-bold'>
+                {time <= 20 ? (
+                  <>
+                    {time <= 5 ? (
+                      <span
+                        className={` ${time <= 1 && 'text-red-600'} ${
+                          time <= 3 && 'text-red-500'
+                        } ${time <= 5 && 'text-red-400'}`}
+                      >
+                        {time}
+                      </span>
+                    ) : (
+                      time
+                    )}
+                  </>
+                ) : (
+                  <span className='text-green-400'>{time.toString()[1]}</span>
+                )}
+              </div>
               {questionCount.curr <= questionCount.max && (
                 <>
                   {data?.question && (
