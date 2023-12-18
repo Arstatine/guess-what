@@ -4,6 +4,7 @@ import CategoryList from '../components/CategoryList';
 import MobileInput from '../components/MobileInput';
 import logo from '../assets/logo.png';
 import mini_logo from '../assets/mini-logo.png';
+import debounce from '../utils/debounce';
 
 function Category() {
   const { id } = useParams();
@@ -24,34 +25,6 @@ function Category() {
     currentPoint: 0,
   }); // add point visibility and value
 
-  // fetch another next data
-  const nextQuestion = () => {
-    if (isStarted) {
-      const fetchData = async () => {
-        const response = await fetch(
-          `https://api.api-ninjas.com/v1/trivia?category=${category}`,
-          {
-            headers: {
-              'X-Api-Key': '0cEqZkmQlCldfxQrLGua5g==ddrT3HdrZsDrlfzm',
-            },
-          }
-        );
-        const data = await response.json();
-        if (data) {
-          setCurrentPoint({ visible: false, currentPoint: 0 });
-          setQuestionCount((prev) => ({ ...prev, curr: prev.curr + 1 }));
-          setInputValue('');
-          setTime(23);
-          setCorrect(false);
-          setEnable(true);
-          setData(data[0]);
-        }
-      };
-
-      fetchData();
-    }
-  };
-
   // fetch data for the first time
   const fetchData = async () => {
     const response = await fetch(
@@ -64,8 +37,22 @@ function Category() {
     );
     const data = await response.json();
     if (data) {
+      setCurrentPoint({ visible: false, currentPoint: 0 });
+      setInputValue('');
+      setCorrect(false);
       setEnable(true);
+      setTime(23);
       setData(data[0]);
+    }
+  };
+
+  const updateDebounce = debounce(fetchData, 500);
+
+  // fetch another next data
+  const nextQuestion = () => {
+    if (isStarted) {
+      setQuestionCount((prev) => ({ ...prev, curr: prev.curr + 1 }));
+      fetchData();
     }
   };
 
@@ -103,12 +90,15 @@ function Category() {
         event.preventDefault();
         stopGame();
       } else if (keyPressed == 'Tab') {
-        event.preventDefault();
         if (enable) {
           setEnable(false);
           nextQuestion();
         }
-      } else if (isCtrlPressed && keyPressed == ' ') {
+      } else if (
+        isCtrlPressed &&
+        keyPressed == ' ' &&
+        questionCount.curr <= questionCount.max
+      ) {
         event.preventDefault();
         restartGame();
       } else if (isCtrlPressed || keyPressed.length > 1) {
@@ -128,8 +118,8 @@ function Category() {
       }
     } else {
       if (event.key === ' ' && !isStarted) {
-        fetchData();
-        return setIsStarted(true);
+        setIsStarted(true);
+        updateDebounce();
       }
     }
   };
@@ -219,7 +209,7 @@ function Category() {
   }, [enable, windowWidth]);
 
   return (
-    <div className='px-12 lg:px-0 py-12 relative flex justify-center items-center flex-col'>
+    <div className='px-12 lg:px-0 relative flex justify-center items-center flex-col'>
       <div className='container flex justify-between items-center flex-col md:flex-row'>
         <Link
           to='/'
@@ -250,7 +240,7 @@ function Category() {
       </div>
       <div className='container py-6 flex justify-between items-start flex-col-reverse lg:flex-row'>
         <CategoryList param={id} />
-        <div className='grow flex flex-col items-stretch w-full mb-12 lg:mb-0'>
+        <div className='grow px-6 flex flex-col items-stretch w-full mb-12 lg:mb-0'>
           <div className='text-center my-12'>
             <div className='text-sm uppercase font-semibold tracking-widest'>
               Category
