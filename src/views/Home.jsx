@@ -1,7 +1,15 @@
+import React, { useMemo } from 'react';
 import { categories } from '../utils';
 import { Link } from 'react-router-dom';
+import CategoryLink from '../components/CategoryLink';
 
 function Home() {
+  const sortedCategories = useMemo(() => {
+    return [...categories].sort((a, b) =>
+      a.category.toLowerCase().localeCompare(b.category.toLowerCase())
+    );
+  }, []);
+
   return (
     <div className='flex justify-center items-center flex-col'>
       <div className='container py-12 px-6 lg:px-0'>
@@ -13,29 +21,17 @@ function Home() {
         </p>
         <br />
         <div className='flex flex-wrap'>
-          {categories
-            .sort((a, b) =>
-              a.category.toLowerCase().localeCompare(b.category.toLowerCase())
-            )
-            .map((category) => {
-              return (
-                <Link
-                  key={category.id}
-                  to={`/category/${category.path}`}
-                  className='bg-slate-200 aspect-video w-full sm:w-1/2 lg:w-1/3 relative group'
-                >
-                  <img
-                    src={category.img}
-                    alt={category.category}
-                    loading='lazy'
-                    className='w-full h-full object-cover'
-                  />
-                  <div className='absolute top-0 left-0 w-full h-full group-hover:bg-[rgba(0,0,0,.3)] bg-[rgba(0,0,0,.5)] flex justify-center items-center text-lg md:text-2xl font-bold text-gray-100 uppercase'>
-                    {category.category}
-                  </div>
-                </Link>
-              );
-            })}
+          {sortedCategories.map((category) => {
+            return (
+              <MemoizedCategoryLink
+                key={category.id}
+                path={category.path}
+                placeholder={category.placeholder}
+                img={category.img}
+                category={category.category}
+              />
+            );
+          })}
         </div>
 
         <div className='text-5xl text-center font-black uppercase outline-none caret-transparent' />
@@ -53,5 +49,7 @@ function Home() {
     </div>
   );
 }
+
+const MemoizedCategoryLink = React.memo(CategoryLink);
 
 export default Home;
