@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { categories } from '../utils';
 import CategoryItem from './CategoryItem';
 
@@ -9,19 +9,51 @@ function CategoryList({ param }) {
     );
   }, []);
 
+  const [focusedIndex, setFocusedIndex] = useState(0);
+  const categoryRefs = useRef([]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Tab') {
+        event.preventDefault(); // Prevent the default Tab key behavior
+
+        // Update the focused index cyclically
+        setFocusedIndex((prevIndex) =>
+          prevIndex === sortedCategories.length - 1 ? 0 : prevIndex + 1
+        );
+
+        // Focus the newly focused item
+        if (categoryRefs.current[focusedIndex]) {
+          categoryRefs.current[focusedIndex].focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [focusedIndex, sortedCategories]);
+
   return (
-    <div className='flex gap-6 flex-col justify-center items-center bg-gray-100 py-12 px-6 rounded w-full lg:w-auto shrink-0'>
-      <div className='flex flex-col text-center'>
+    <div
+      className='flex gap-6 flex-col justify-center items-center bg-gray-100 py-12 px-6 rounded w-full lg:w-auto shrink-0 outline-none'
+      tabIndex={0}
+    >
+      <div className='flex flex-col text-center outline-none' tabIndex={-1}>
         <h1 className='font-bold uppercase text-center pb-4 text-2xl'>
           Categories
         </h1>
-        {sortedCategories.map((category) => {
+        {sortedCategories.map((category, index) => {
           return (
             <MemoizeCategoryItem
               key={category.id}
               category={category.category}
               path={category.path}
               id={param}
+              tabIndex={index === focusedIndex ? 0 : -1}
+              ref={(element) => (categoryRefs.current[index] = element)}
             />
           );
         })}

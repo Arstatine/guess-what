@@ -9,6 +9,30 @@
   transition: transform;
 }
 
+.dot-animate:after {
+  content: '.';
+  animation: animateDot infinite 1s;
+  transition: transform;
+}
+
+@keyframes animateDot {
+  0% {
+    content: '.';
+  }
+
+  40% {
+    content: '. .';
+  }
+
+  70% {
+    content: '. . .';
+  }
+
+  100% {
+    content: '.';
+  }
+}
+
 @keyframes animateThis {
   0% {
     transform: translateY(0px);

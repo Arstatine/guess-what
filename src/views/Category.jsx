@@ -46,7 +46,7 @@ function Category() {
     }
   };
 
-  const updateDebounce = debounce(fetchData, 500);
+  const updateDebounce = debounce(fetchData, 1000);
 
   // fetch another next data
   const nextQuestion = () => {
@@ -90,6 +90,7 @@ function Category() {
         event.preventDefault();
         stopGame();
       } else if (keyPressed == 'Tab') {
+        event.preventDefault();
         if (enable) {
           setEnable(false);
           nextQuestion();
@@ -209,8 +210,14 @@ function Category() {
   }, [enable, windowWidth]);
 
   return (
-    <div className='px-12 lg:px-0 relative flex justify-center items-center flex-col'>
-      <div className='container flex justify-between items-center flex-col md:flex-row'>
+    <div
+      className='px-12 lg:px-0 relative flex justify-center items-center flex-col outline-none'
+      tabIndex={-1}
+    >
+      <div
+        className='container flex justify-between items-center flex-col md:flex-row outline-none'
+        tabIndex={-1}
+      >
         <Link
           to='/'
           className='hidden lg:block text-5xl font-black outline-none'
@@ -251,31 +258,41 @@ function Category() {
           </div>
           {isStarted && (
             <>
-              <div className='text-lg font-bold text-center'>Timer</div>
-              <div className='text-8xl text-center font-bold'>
-                {time <= 20 ? (
-                  <>
-                    {time <= 5 ? (
-                      <span
-                        className={` ${time <= 1 && 'text-red-600'} ${
-                          time <= 3 && 'text-red-500'
-                        } ${time <= 5 && 'text-red-400'}`}
-                      >
-                        {time}
-                      </span>
+              {data?.question && (
+                <>
+                  <div className='text-lg font-bold text-center'>Timer</div>
+                  <div className='text-8xl text-center font-bold'>
+                    {time <= 20 ? (
+                      <>
+                        {time <= 5 ? (
+                          <span
+                            className={` ${time <= 1 && 'text-red-600'} ${
+                              time <= 3 && 'text-red-500'
+                            } ${time <= 5 && 'text-red-400'}`}
+                          >
+                            {time}
+                          </span>
+                        ) : (
+                          time
+                        )}
+                      </>
                     ) : (
-                      time
+                      <span className='text-green-400'>
+                        {time.toString()[1]}
+                      </span>
                     )}
-                  </>
-                ) : (
-                  <span className='text-green-400'>{time.toString()[1]}</span>
-                )}
-              </div>
+                  </div>
+                </>
+              )}
               {questionCount.curr <= questionCount.max && (
                 <>
-                  {data?.question && (
-                    <h1 className='text-center text-2xl text-gray-800 my-6'>
+                  {data?.question ? (
+                    <h1 className='text-center text-2xl text-gray-800 my-6 transition-all'>
                       {data?.question}
+                    </h1>
+                  ) : (
+                    <h1 className='text-center text-2xl text-gray-800 my-6 transition-all'>
+                      Loading Question <span className='dot-animate'></span>
                     </h1>
                   )}
                 </>
