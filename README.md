@@ -4,11 +4,20 @@
 
 ### Using [Trivia API](https://api-ninjas.com/api/trivia) from [API Nijas](https://api-ninjas.com)
 
-Install dependencies: <br>
-`npm install`
+## How to run?
 
-Run development mode: <br>
-`npm run dev`
+Prerequisite:
+- Must have Node.js installed in the computer
+...To check run `node -v` in the terminal or command prompt
+- If no download Node.js here https://nodejs.org/en and install
+
+1. Clone this repository in your computer
+`git clone https://github.com/Arstatine/guess-what.git`
+2. Open the directory folder in text editor or compiler
+3. Open terminal and run the command below:
+- `npm install` to install dependencies 
+- `npm run dev` to start the server
+5. Copy the local server link and paste it to the browser or just go to this link [http://127.0.0.1:5173/](http://127.0.0.1:5173/)
 
 ## GAMEPLAY
 Visit the app [here](https://trivia-guess-what.vercel.app/)
