@@ -11,6 +11,7 @@ Run development mode: <br>
 `npm run dev`
 
 ## GAMEPLAY
+Visit the app [here](https://trivia-guess-what.vercel.app/)
 
 1. Select Categories of your chice
 
